@@ -4,25 +4,10 @@ from main import app
 client = TestClient(app)
 
 
-def test_predict_success():
-    response = client.post("/predict", json={
-        "feature_1": 5.1,
-        "feature_2": 3.5,
-        "feature_3": 1.4,
-        "feature_4": 0.2
-    })
+def test_predict_endpoint():
+    response = client.post("/predict", json={"samples": ["test message", "you won a prize"]})
     assert response.status_code == 200
-    assert "prediction" in response.json()
-
-
-def test_predict_out_of_range():
-    response = client.post("/predict", json={
-        "feature_1": -1,
-        "feature_2": 15,
-        "feature_3": 0,
-        "feature_4": 2
-    })
-    assert response.status_code == 422
+    assert "predictions" in response.json()
 
 
 def test_upload_model():
